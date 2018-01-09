@@ -17,8 +17,30 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
+
+  socket.emit('newMessage', {
+    from: "jesus",
+    text: "hi, friend",
+    createdAt: 123
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+
+
 });
+
+
+
 app.use(express.static(publicPath));
+
+
+
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
