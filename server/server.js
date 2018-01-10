@@ -14,6 +14,17 @@ var io = socketIO(server);
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+
+  socket.emit('newMessage', { // ONLY USER
+    from: 'Admin',
+    text: 'Welcome to the chat room!'
+  });
+
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'A new user has joined the chat room!'
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
@@ -21,11 +32,17 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
-    io.emit('newMessage', {
+    io.emit('newMessage', { // ALL USERS
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     })
+
+    // socket.broadcast.emit('newMessage', { //all can see except creator
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
